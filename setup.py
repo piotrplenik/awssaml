@@ -1,4 +1,4 @@
-import setuptools
+from setuptools import setup, find_packages
 
 with open("README.md", "r") as file:
     long_description = file.read()
@@ -8,14 +8,14 @@ requires = [
 ]
 
 packages = [
-    "client",
-    "client.commands",
-    "client.helpers"
+    "awssaml",
+    "awssaml.api",
+    "awssaml.commands",
 ]
 
-setuptools.setup(
-    name="aws-saml",
-    version="1.0.0",
+setup(
+    name="awssaml",
+    version="0.0.5",
     author="Piotr Plenik",
     author_email="piotr.plenik@gmail.com",
     description="Security Assertion Markup Language (SAML) for Amazon.",
@@ -27,7 +27,21 @@ setuptools.setup(
     install_requires=requires,
     entry_points={
         "console_scripts": [
-            "client=client.__main__:main"
+            "awssaml=awssaml.__main__:main"
         ]
-    }
+    },
+    classifiers=[
+        'Development Status :: 4 - Alfa',
+        'Environment :: Console',
+        'Environment :: Other Environment',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Information Technology',
+        'License :: OSI Approved :: Apache Software License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3.7',
+        'Topic :: Internet',
+        'Topic :: Software Development :: Build Tools',
+        'Topic :: Utilities',
+    ]
 )
