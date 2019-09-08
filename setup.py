@@ -6,12 +6,19 @@ with open("README.md", "r") as file:
     long_description = file.read()
 
 requires = [
-    "docopt>=0.6.0,<=0.6.2"
+    "docopt>=0.6.0,<=0.6.2",
+    "Crypto>=1.4.1,<1.5.0",
+    "beautifulsoup4>=4.7.1,<4.8.0",
+    "requests-ntlm>=1.1.0,<1.2.0",
+    "pycryptodome>=3.8.2,<3.9.0",
+    "requests>=2.22.0,<2.23.0",
+    "configparser>=3.7.4,<3.8.0",
+    "boto3>=1.9.184,<1.10.0"
 ]
 
 setup(
     name="aws-saml",
-    version="0.0.7",
+    version="0.0.10",
     author="Piotr Plenik",
     author_email="piotr.plenik@gmail.com",
     description="Security Assertion Markup Language (SAML) for Amazon.",
