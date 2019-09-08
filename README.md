@@ -7,13 +7,11 @@ Access to the AWS Management Console and AWS API for my Active Directory users u
 ## Requirements
 
  - Linux (not tested on Windows OS, hope work)
- - Python - [latest version 3.x](https://www.python.org/downloads/)
- - A minimal [AWS credentials file](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) 
-   (for example, `~/.aws/credentials`)
+ - Python 3 - [latest version 3.x](https://www.python.org/downloads/)
 
-## Install all requirements
+## Installation
 
-> pip3 install -r requirements.txt
+> pip3 install -i https://test.pypi.org/simple/ awssaml
 
 ## Configuration file
 ~~~~
@@ -23,52 +21,23 @@ Access to the AWS Management Console and AWS API for my Active Directory users u
 identity_url = https://adfs.example.com/adfs/ls/IdpInitiatedSignOn.aspx?loginToRp=urn:amazon:webservices
 region = eu-west-1
 
-username = [AD username]
+username = [SAML User]
 pemfile = [pem filename]
 password_file = /home/[username]/.aws/secret      # This is secret file for decrypt your password
 ~~~~
 
-~~~~
-> nano ~/.aws/credentials
-...
-[default]
-output = json
-region = eu-west-1
-aws_access_key_id = 
-aws_secret_access_key = ap-southeast-2
+## Usage
 
-[saml]
-output = json
-region = eu-west-1
-aws_access_key_id = x
-aws_secret_access_key = x
-aws_session_token = x
+## Access to AWS Console
 
 ~~~~
-
-## Executable
-
-~~~~
-> python3 samlapi
-Username: `<SAML User>`
-Password: `<SAML Password>`
-
-Please choose the role you would like to assume:
-[ 0 ]:  arn:aws:iam::123456789012:role/ADFS-DevAdmin
-Selection:  0
-
-----------------------------------------------------------------
-Your new access key pair has been stored in the AWS configuration file `~/.aws/credentials` under the saml profile.
-Note that it will expire at 2018-12-27T15:53:43Z.
-After this time you may safely rerun this script to refresh your access key pair.
-To use this credential call the AWS CLI with the `--profile` option (e.g. `aws --profile saml ec2 describe-instances`).
-----------------------------------------------------------------
+> awssaml console
 ~~~~
 
-Or try to refresh API key every 55 minutes (3300 seconds)
+## Get AWS Api Credentials
 
 ~~~~
-> watch -n 3300 samlapi
+> awssaml api
 ~~~~
 
 
