@@ -26,7 +26,7 @@ setup(
     include_package_data=True,
     long_description_content_type="text/markdown",
     url="https://github.com/jupeter/awssaml",
-    packages=['awssaml', 'awssaml.api', 'awssaml.commands'],
+    packages=find_packages(),
     scripts=['bin/awssaml'],
     install_requires=requires,
     entry_points={
