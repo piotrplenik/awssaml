@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+
+import awssaml.CLIDriver
+
+
+def main():
+    return awssaml.CLIDriver.main()
+
+if __name__ == '__main__':
+    sys.exit(main())

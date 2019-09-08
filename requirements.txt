@@ -1,0 +1,8 @@
+Crypto
+beautifulsoup4
+requests-ntlm
+pycryptodome
+requests
+configparser
+boto3
+docopt
