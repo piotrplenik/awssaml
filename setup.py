@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from setuptools import setup, find_packages
 
 with open("README.md", "r") as file:
@@ -7,15 +9,9 @@ requires = [
     "docopt>=0.6.0,<=0.6.2"
 ]
 
-packages = [
-    "awssaml",
-    "awssaml.api",
-    "awssaml.commands",
-]
-
 setup(
     name="awssaml",
-    version="0.0.5",
+    version="0.0.7",
     author="Piotr Plenik",
     author_email="piotr.plenik@gmail.com",
     description="Security Assertion Markup Language (SAML) for Amazon.",
@@ -23,7 +19,8 @@ setup(
     include_package_data=True,
     long_description_content_type="text/markdown",
     url="https://github.com/jupeter/awssaml",
-    packages=packages,
+    packages=['awssaml', 'awssaml.api', 'awssaml.commands'],
+    scripts=['bin/awssaml'],
     install_requires=requires,
     entry_points={
         "console_scripts": [
@@ -31,7 +28,7 @@ setup(
         ]
     },
     classifiers=[
-        'Development Status :: 4 - Alfa',
+        'Development Status :: 3 - Alpha',
         'Environment :: Console',
         'Environment :: Other Environment',
         'Intended Audience :: Developers',
