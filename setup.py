@@ -18,7 +18,7 @@ requires = [
 
 setup(
     name="awssaml",
-    version="0.0.11",
+    version="0.0.12",
     author="Piotr Plenik",
     author_email="piotr.plenik@gmail.com",
     description="Security Assertion Markup Language (SAML) for Amazon.",
