@@ -1,11 +1,13 @@
-"""Usage:
+"""Implement Federated API and CLI Access Using SAML 2.0 and AD FS
+
+Usage:
   awssaml <command> [PROFILE]
   awssaml --help
   awssaml --version
 
 Commands:
   console   Open Console in the web browser
-  api       Open Console in the web browser
+  api       Configure CPI access
 
 Arguments:
   PROFILE   optional profile name
