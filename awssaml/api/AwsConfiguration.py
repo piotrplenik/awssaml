@@ -13,10 +13,8 @@ class AwsConfiguration:
     def __init__(self, profile: str = None):
         home = expanduser("~")
 
-        config_filename = home + self.aws_config_file
-
-        if not isfile(config_filename):
-            self.print_configuration_instruction(config_filename)
+        if not isfile(self.__get_config_filename()):
+            self.print_configuration_instruction()
             exit(1)
 
         config = configparser.RawConfigParser()
@@ -34,10 +32,21 @@ class AwsConfiguration:
         return self.__get_config_value('password_file')
 
     def get_identity_url(self):
-        return self.__get_config_value('identity_url')
+        url = self.__get_config_value('identity_url')
+
+        if url is None:
+            self.print_configuration_instruction()
+            exit(1)
+
+        return url
 
     def get_region(self):
-        return self.__get_config_value('region')
+        region = self.__get_config_value('region')
+
+        if region is None:
+            region = "eu-west-1"
+
+        return region
 
     def get_role_arn(self):
         return self.__get_config_value('role_arn')
@@ -66,17 +75,26 @@ class AwsConfiguration:
 
         return list(map(lambda x: x[8:], profiles))
 
-    def print_configuration_instruction(self, config_filename: str):
+    def print_configuration_instruction(self):
         # Give the user some basic info as to what has just happened
         print('Missing `awssaml` configuration.')
-        print('\nPLease setup `%s` configuration file, and provide:' % config_filename)
-        print('\n[samlapi]')
+        print('\nPlease setup `%s` configuration file, and provide:' % self.__get_config_filename())
+        print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+        print('[samlapi]')
         print('identity_url = https://adfs.example.com/adfs/ls/IdpInitiatedSignOn.aspx?loginToRp=urn:amazon:webservices')
         print('region = eu-west-1')
-        print('\nWhere `identity_url` is AD FS 2.0 URL. ')
-        print('For more information see:')
+        print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+        print('\nWhere:')
+        print(' - `identity_url` is AD FS 2.0 URL. ')
+        print(' - `region` is your default region. ')
+        print('\nFor more information see:')
         print('\thttps://aws.amazon.com/blogs/security/'
               'how-to-implement-federated-api-and-cli-access-using-saml-2-0-and-ad-fs/\n')
+
+    def __get_config_filename(self):
+        home = expanduser("~")
+
+        return home + self.aws_config_file
 
     def __get_config_value(self, name: str):
         value = self.__get_profile_config_value(name)
