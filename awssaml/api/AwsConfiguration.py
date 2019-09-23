@@ -16,7 +16,8 @@ class AwsConfiguration:
         config_filename = home + self.aws_config_file
 
         if not isfile(config_filename):
-            raise Exception("Missing config file", config_filename)
+            self.print_configuration_instruction(config_filename)
+            exit(1)
 
         config = configparser.RawConfigParser()
         config.read(home + self.aws_config_file)
@@ -64,6 +65,18 @@ class AwsConfiguration:
         profiles = list(filter(lambda x: x.startswith('profile '), self.config.sections()))
 
         return list(map(lambda x: x[8:], profiles))
+
+    def print_configuration_instruction(self, config_filename: str):
+        # Give the user some basic info as to what has just happened
+        print('Missing `awssaml` configuration.')
+        print('\nPLease setup `%s` configuration file, and provide:' % config_filename)
+        print('\n[samlapi]')
+        print('identity_url = https://adfs.example.com/adfs/ls/IdpInitiatedSignOn.aspx?loginToRp=urn:amazon:webservices')
+        print('region = eu-west-1')
+        print('\nWhere `identity_url` is AD FS 2.0 URL. ')
+        print('For more information see:')
+        print('\thttps://aws.amazon.com/blogs/security/'
+              'how-to-implement-federated-api-and-cli-access-using-saml-2-0-and-ad-fs/\n')
 
     def __get_config_value(self, name: str):
         value = self.__get_profile_config_value(name)
