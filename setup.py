@@ -17,7 +17,7 @@ requires = [
 ]
 
 setup(
-    name="aws-saml",
+    name="awssaml",
     version="0.0.10",
     author="Piotr Plenik",
     author_email="piotr.plenik@gmail.com",
