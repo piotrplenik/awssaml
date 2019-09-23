@@ -14,58 +14,68 @@ Access to the AWS Management Console and AWS API for my Active Directory users u
 > pip3 install -i https://test.pypi.org/simple/ awssaml
 
 ## Configuration file
-~~~~
-> nano ~/.aws/config
 
+All configuration is stored in `~/.aws/config` file. 
+
+#### Basic configuration
+~~~~
 [samlapi]
 identity_url = https://adfs.example.com/adfs/ls/IdpInitiatedSignOn.aspx?loginToRp=urn:amazon:webservices
 region = eu-west-1
+~~~~
 
+#### Advanced samlapi configuration 
+
+##### Default username
+~~~~
+[samlapi]
+#...
 username = [SAML User]
-pemfile = [pem filename]
-password_file = /home/[username]/.aws/secret      # This is secret file for decrypt your password
 ~~~~
 
-## Usage
-
-## Access to AWS Console
-
+#### Default session duration
+Setup 12 hours (it's 43200 seconds): 
 ~~~~
-> awssaml console
-~~~~
-
-## Get AWS Api Credentials
-
-~~~~
-> awssaml api
+[samlapi]
+#...
+session_duration = 43200
 ~~~~
 
+#### Keep encrypted password
 
-## Setup automatic login
+To generate password, use `set-samlapi-access.py` script. 
+Application store password encrypted, using PEM certificate.
 
-1. Generate your private RSA key (there is a lot [documentation](https://support.microfocus.com/kb/doc.php?id=7013103) how to do it) 
-2. Execute "set-samlapi-access.py" to safe your credentials:
+Before you use script, generate your private RSA key  ([more info](https://support.microfocus.com/kb/doc.php?id=7013103))
+
 ~~~~
 > python3 set-samlapi-access.py
-Full path to your PEM file: C:\<full-path-to-your-file>.pem
+Full path to your PEM file: <full-path-to-your-file>.pem
 Username: <SAML User>
 Password:
 Configuration updated.
 ~~~~
 
-## Setup static ARN
+#### Advanced profile configuration 
 
-To set manual set to your credentials:
-````
-[samlapi.py]
-username = ....
-pemfile = ....
-password = ....
-manual_role_arn = arn:aws:iam::[ID]:role/[role]
-manual_principal_arn = arn:aws:iam::[ID]:saml-provider/[provider]
-````
+You can setup custom profiles to reuse. 
+Sample configuration entry for profile:
 
-## More information
+~~~~
+[profile nonprod-application1]
+role_arn = arn:aws:iam::[ID]:role/[role]
+principal_arn = arn:aws:iam::[ID]:saml-provider/[provider]
+source_profile = nonprod
+session_duration = 43200
+~~~~
+
+Usage:
+~~~~
+> awssaml api nonprod-application1
+> awssaml console nonprod-application1
+~~~~
+
+## Reference
  - [How to Implement Federated API](https://aws.amazon.com/blogs/security/how-to-implement-federated-api-and-cli-access-using-saml-2-0-and-ad-fs/)
  - [How to grant my Active Directory users access to the API or AWS CLI with AD FS?](https://aws.amazon.com/premiumsupport/knowledge-center/adfs-grant-ad-access-api-cli/)
  
