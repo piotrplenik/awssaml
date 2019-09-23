@@ -11,7 +11,7 @@ Access to the AWS Management Console and AWS API for my Active Directory users u
 
 ## Installation
 
-> pip3 install -i https://test.pypi.org/simple/ awssaml
+> pip3 install awssaml
 
 ## Configuration file
 
