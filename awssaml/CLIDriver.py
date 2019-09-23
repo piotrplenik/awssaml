@@ -1,5 +1,6 @@
-"""usage:
+"""Usage:
   awssaml <command> [PROFILE]
+  awssaml --help
   awssaml --version
 
 Commands:
