@@ -50,7 +50,7 @@ class Authentication:
             print("Username: '%s'" % username)
             return username
 
-        print("Username: ")
+        print("Username: ", end=" ")
         return input()
 
     def get_password(self):

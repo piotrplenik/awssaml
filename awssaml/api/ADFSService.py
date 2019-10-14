@@ -22,8 +22,12 @@ class ADFSService:
         # Opens the initial AD FS URL and follows all of the HTTP302 redirects
         response = session.get(self.identity_url, verify=True)
 
-        if response.status_code != 200 and response.status_code != 401:
-            print("Incorrect response status code. \nStatus '%d'" % response.status_code)
+        if response.status_code == 401:
+            print("Incorrect username or password.")
+            exit(1)
+
+        if response.status_code != 200:
+            print("Incorrect response status code. \nStatus '%d'\nContent:\n" % (response.status_code, response.text))
             exit(1)
 
         # Decode the response and extract the SAML assertion

@@ -6,8 +6,9 @@ Access to the AWS Management Console and AWS API for my Active Directory users u
 
 ## Requirements
 
- - Linux (not tested on Windows OS, hope work)
+ - Linux (tested on Ubuntu 19.04+) or Windows (tested on 10)
  - Python 3 - [latest version 3.x](https://www.python.org/downloads/)
+ - on Windows, `pycrypto` require [Microsoft Visual C++ Build Tools](https://visualstudio.microsoft.com/downloads/)
 
 ## Installation
 
