@@ -3,7 +3,7 @@ from .AwsConfiguration import AwsConfiguration
 from .ADFSService import ADFSService
 from .AwsStsService import AwsStsService
 from .PasswordDecrypt import decrypt
-
+from getpass import getpass
 
 class Authentication:
     configuration: AwsConfiguration
@@ -58,8 +58,7 @@ class Authentication:
             print("Password: <hidden>")
             return decrypt(self.configuration.get_password_file(), self.configuration.get_pep_file())
 
-        print("Password: ")
-        return input()
+        return getpass(prompt='Password: ')
 
     def get_role_principal_arn(self):
         if self.configuration.get_role_arn() is not None and self.configuration.get_principal_arn() is not None:
