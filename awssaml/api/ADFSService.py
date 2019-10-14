@@ -17,14 +17,18 @@ class ADFSService:
 
         # Programmatically get the SAML assertion
         # Set up the NTLM authentication handler by using the provided credential
-        session.auth = HttpNtlmAuth(username, password)
+        session.auth = HttpNtlmAuth(username, password, session)
 
         # Opens the initial AD FS URL and follows all of the HTTP302 redirects
         response = session.get(self.identity_url, verify=True)
 
+        if response.status_code != 200 and response.status_code != 401:
+            print("Incorrect response status code. \nStatus '%d'" % response.status_code)
+            exit(1)
+
         # Decode the response and extract the SAML assertion
         soup = BeautifulSoup(response.text, "html.parser")
-        self.assertion = ''
+        self.assertion = False
 
         # Look for the SAMLResponse attribute of the input tag (determined by
         # analyzing the debug print lines above)
@@ -32,13 +36,21 @@ class ADFSService:
             if inputtag.get('name') == 'SAMLResponse':
                 self.assertion = inputtag.get('value')
 
+        if not self.assertion:
+            print("Incorrect response.")
+            print("URL: '%s'" % self.identity_url)
+            print("Username, password: '%s', %d digts" % (username, len(password)))
+            print("Status '%d'" % response.status_code)
+            print("Response: %s" % response.text)
+            exit(1)
+
     def get_assertion(self):
         return self.assertion
 
     def get_aws_roles(self):
         # Parse the returned assertion and extract the authorized roles
         awsroles = []
-        root = ET.fromstring(base64.b64decode(self.assertion))
+        root = ET.fromstring(base64.b64decode(self.get_assertion()))
 
         for saml2attribute in root.iter('{urn:oasis:names:tc:SAML:2.0:assertion}Attribute'):
             if saml2attribute.get('Name') == 'https://aws.amazon.com/SAML/Attributes/Role':
