@@ -2,18 +2,20 @@ import sys
 from .AwsConfiguration import AwsConfiguration
 from .ADFSService import ADFSService
 from .AwsStsService import AwsStsService
-from .PasswordDecrypt import decrypt
 from getpass import getpass
+import keyring
 
 class Authentication:
     configuration: AwsConfiguration
     service: ADFSService
     profile: str = None
+    keyring: keyring.backends.SecretService.Keyring
 
     def __init__(self, profile: str = None):
         self.configuration = AwsConfiguration(profile)
         self.service = ADFSService(self.configuration.get_identity_url())
         self.profile = profile
+        keyring.get_keyring()
 
     def authenticate(self):
         username = self.get_username()
@@ -54,11 +56,16 @@ class Authentication:
         return input()
 
     def get_password(self):
-        if self.configuration.get_pep_file() and self.configuration.get_password_file():
-            print("Password: <hidden>")
-            return decrypt(self.configuration.get_password_file(), self.configuration.get_pep_file())
+        password = keyring.get_password("awssaml", "saml-password")
 
-        return getpass(prompt='Password: ')
+        if not password:
+            password = getpass(prompt='Password: ')
+            keyring.set_password("awssaml", "saml-password", password)
+            print('Password saved.')
+        else:
+            print('Use saved password.')
+
+        return password
 
     def get_role_principal_arn(self):
         if self.configuration.get_role_arn() is not None and self.configuration.get_principal_arn() is not None:
