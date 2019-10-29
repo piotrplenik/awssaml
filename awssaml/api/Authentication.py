@@ -20,8 +20,9 @@ class Authentication:
     def authenticate(self):
         username = self.get_username()
         password = self.get_password()
+        connection = self.get_connection()
 
-        self.service.connect(username, password)
+        self.service.connect(connection, username, password)
 
         role_principal_arn = self.get_role_principal_arn()
         role_arn = role_principal_arn[0]
@@ -38,7 +39,7 @@ class Authentication:
             issuer=self.configuration.get_identity_url(),
             role_arn=role_arn,
             principal_arn=principal_arn,
-            saml_assertion=self.service.get_assertion(),
+            saml_assertion=self.service.connection.get_assertion(),
             duration_seconds=session_duration,
             region=self.configuration.get_region()
         )
@@ -111,3 +112,12 @@ class Authentication:
             return profile
 
         return "saml"
+
+    def get_connection(self) -> str:
+        value = self.configuration.get_connection_type()
+
+        connection = value.lower() if value else 'ntlm'
+
+        print("Connection: '%s'" % connection)
+
+        return connection
