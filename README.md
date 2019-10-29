@@ -1,6 +1,7 @@
 # Purpose
 
-Access to the AWS Management Console and AWS API for my Active Directory users using federation (AD FS).
+Access to the AWS Management Console and AWS API for my Active Directory users using federation (AD FS 2).
+Use Keyring tool for store password.
 
 # Usage
 
@@ -40,21 +41,6 @@ Setup 12 hours (it's 43200 seconds):
 [samlapi]
 #...
 session_duration = 43200
-~~~~
-
-#### Keep encrypted password
-
-To generate password, use `set-samlapi-access.py` script. 
-Application store password encrypted, using PEM certificate.
-
-Before you use script, generate your private RSA key  ([more info](https://support.microfocus.com/kb/doc.php?id=7013103))
-
-~~~~
-> python3 set-samlapi-access.py
-Full path to your PEM file: <full-path-to-your-file>.pem
-Username: <SAML User>
-Password:
-Configuration updated.
 ~~~~
 
 #### Advanced profile configuration 
