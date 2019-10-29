@@ -3,6 +3,12 @@
 Access to the AWS Management Console and AWS API for my Active Directory users using federation (AD FS 2).
 Use Keyring tool for store password.
 
+# Main features
+
+ - Support AD FS 2 and AD FS 4
+ - Allow to login to AWS Console 
+ - ALlow to generate AWS Access Key
+
 # Usage
 
 ## Requirements
@@ -24,11 +30,17 @@ All configuration is stored in `~/.aws/config` file.
 [samlapi]
 identity_url = https://adfs.example.com/adfs/ls/IdpInitiatedSignOn.aspx?loginToRp=urn:amazon:webservices
 region = eu-west-1
+adfs_connection = ntlm
 ~~~~
 
-#### Advanced samlapi configuration 
+#### Advanced samlapi configuration
 
-##### Default username
+##### Use different ADFS connection methods
+
+ - *ntlm* - Use NTLM authentication (default)
+ - *web_form* - Use web form authentication  
+
+##### Set default username
 ~~~~
 [samlapi]
 #...

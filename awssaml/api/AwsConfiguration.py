@@ -31,6 +31,14 @@ class AwsConfiguration:
     def get_password_file(self):
         return self.__get_config_value('password_file')
 
+    def get_connection_type(self):
+        type = self.__get_config_value('adfs_connection')
+
+        if type is None:
+            type = 'ntlm'
+
+        return type
+
     def get_identity_url(self):
         url = self.__get_config_value('identity_url')
 
