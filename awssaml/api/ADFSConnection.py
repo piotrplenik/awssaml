@@ -1,28 +1,34 @@
-from abc import ABC, abstractmethod
+from abc import ABCMeta
 import requests
 from requests_ntlm import HttpNtlmAuth
 from bs4 import BeautifulSoup
 import re
-from urllib.parse import urlparse, urlunparse
+import sys
+
+if ((3, 0) <= sys.version_info <= (3, 9)):
+    from urllib.parse import urlparse
+elif ((2, 0) <= sys.version_info <= (2, 9)):
+    from urlparse import urlparse
 
 
 class ConnectionType(object):
     @staticmethod
-    def ntlm() -> str:
+    def ntlm():
+        # type: () -> str
         return 'ntlm'
 
     @staticmethod
-    def web_form() -> str:
+    def web_form():
+        # type: () -> str
         return 'web_form'
 
 
-class ADFSConnection(ABC):
-    __assertion: str
-    __username: str
-    __password: str
-    __identity_url: str
+class ADFSConnection:
+    __metaclass__ = ABCMeta
 
-    def __init__(self, identity_url: str, username: str, password: str):
+    def __init__(self, identity_url, username, password):
+        # type: (str, str, str) -> None
+        self.__annotation = None
         self.__identity_url = identity_url
         self.__username = username
         self.__password = password
@@ -30,19 +36,24 @@ class ADFSConnection(ABC):
     def connect(self):
         pass
 
-    def get_username(self) -> str:
+    def get_username(self):
+        # type: () -> str
         return self.__username
 
-    def get_password(self) -> str:
+    def get_password(self):
+        # type: () -> str
         return self.__password
 
-    def get_assertion(self) -> str:
+    def get_assertion(self):
+        # type: () -> str
         return self.__assertion
 
-    def get_identity_url(self) -> str:
+    def get_identity_url(self):
+        # type: () -> str
         return self.__identity_url
 
     def save_assertion(self, response):
+        # type: (str) -> None
         # Decode the response and extract the SAML assertion
         soup = BeautifulSoup(response.text, "html.parser")
         self.__assertion = False

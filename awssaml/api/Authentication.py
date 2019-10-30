@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 from .AwsConfiguration import AwsConfiguration
 from .ADFSService import ADFSService
@@ -6,12 +7,8 @@ from getpass import getpass
 import keyring
 
 class Authentication:
-    configuration: AwsConfiguration
-    service: ADFSService
-    profile: str = None
-    keyring: keyring.backends.SecretService.Keyring
-
-    def __init__(self, profile: str = None):
+    def __init__(self, profile = None):
+        # type: (str) -> None
         self.configuration = AwsConfiguration(profile)
         self.service = ADFSService(self.configuration.get_identity_url())
         self.profile = profile
@@ -107,13 +104,15 @@ class Authentication:
                 return awsroles[0].split(',')
 
     def get_source_profile(self):
+        # type: () -> str
         profile = self.configuration.get_source_profile()
         if profile:
             return profile
 
         return "saml"
 
-    def get_connection(self) -> str:
+    def get_connection(self):
+        # type: () -> str
         value = self.configuration.get_connection_type()
 
         connection = value.lower() if value else 'ntlm'
