@@ -7,12 +7,13 @@ from .ADFSConnection import ConnectionType, ADFSConnection, NtlmADFSConnection, 
 
 
 class ADFSService:
-    connection: ADFSConnection
-
-    def __init__(self, identity_url: str):
+    def __init__(self, identity_url):
+        # type: (str) -> None
         self.identity_url = identity_url
+        self.connection = None
 
-    def connect(self, type_name: str, username: str, password: str):
+    def connect(self, type_name, username, password):
+        # type: (str, str, str) -> None
         if type_name == ConnectionType.web_form():
             self.connection = WebFormADFSConnection(self.identity_url, username, password)
         else:

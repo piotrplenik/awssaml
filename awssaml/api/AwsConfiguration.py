@@ -1,6 +1,10 @@
-import configparser
+import sys
 from os.path import expanduser, isfile
 
+if ((3, 0) <= sys.version_info <= (3, 9)):
+    import configparser
+elif ((2, 0) <= sys.version_info <= (2, 9)):
+    import ConfigParser as configparser
 
 class AwsConfiguration:
     aws_config_file = '/.aws/config'
@@ -10,7 +14,8 @@ class AwsConfiguration:
     credentials = None
     profile = None
 
-    def __init__(self, profile: str = None):
+    def __init__(self, profile = None):
+        # type: (str) -> None
         home = expanduser("~")
 
         if not isfile(self.__get_config_filename()):
@@ -104,7 +109,8 @@ class AwsConfiguration:
 
         return home + self.aws_config_file
 
-    def __get_config_value(self, name: str):
+    def __get_config_value(self, name):
+        # type (str) -> str
         value = self.__get_profile_config_value(name)
 
         if not value:
@@ -112,7 +118,8 @@ class AwsConfiguration:
 
         return value
 
-    def __get_profile_config_value(self, name: str, profile: str = None):
+    def __get_profile_config_value(self, name, profile = None):
+        # type (str, str) -> str
         if not profile:
             profile = self.profile
 
@@ -126,7 +133,8 @@ class AwsConfiguration:
 
         return None
 
-    def __get_section_config_value(self, name: str):
+    def __get_section_config_value(self, name):
+        # type (str) -> str
         section = self.aws_config_section
 
         if not self.config.has_section(section):

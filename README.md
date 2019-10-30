@@ -15,6 +15,7 @@ Use Keyring tool for store password.
 
  - Linux (tested on Ubuntu 19.04+) or Windows (tested on 10)
  - Python 3 - [latest version 3.x](https://www.python.org/downloads/)
+ - Python 2 backward compatible
  - on Windows, `pycrypto` require [Microsoft Visual C++ Build Tools](https://visualstudio.microsoft.com/downloads/)
 
 ## Installation

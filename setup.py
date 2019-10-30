@@ -12,7 +12,7 @@ requires = [
     "requests>=2.22.0,<2.23.0",
     "configparser>=3.7.4,<3.8.0",
     "boto3>=1.9.184,<1.10.0",
-    "keyring>=19.2.0,<19.3.0"
+    "keyring>=18.0.1,<19.3.0"
 ]
 
 setup(
@@ -34,7 +34,7 @@ setup(
         ]
     },
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 3 - Stable',
         'Environment :: Console',
         'Environment :: Other Environment',
         'Intended Audience :: Developers',
@@ -43,6 +43,7 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 2.7',
         'Topic :: Internet',
         'Topic :: Software Development :: Build Tools',
         'Topic :: Utilities',

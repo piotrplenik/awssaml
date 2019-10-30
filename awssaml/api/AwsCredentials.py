@@ -3,12 +3,12 @@ from os.path import expanduser, isfile
 
 
 class AwsCredentials:
-    aws_credentials_section: str
-    aws_credentials_file: str = '/.aws/credentials'
+    aws_credentials_file = '/.aws/credentials'
 
     credentials = None
 
-    def __init__(self, section: str = 'saml'):
+    def __init__(self, section = 'saml'):
+        # type: (str) -> None
         self.aws_credentials_section = section
 
         home = expanduser("~")
