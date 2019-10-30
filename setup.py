@@ -34,7 +34,7 @@ setup(
         ]
     },
     classifiers=[
-        'Development Status :: 3 - Stable',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Environment :: Other Environment',
         'Intended Audience :: Developers',
