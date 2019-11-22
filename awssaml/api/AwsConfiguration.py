@@ -30,12 +30,6 @@ class AwsConfiguration:
     def get_username(self):
         return self.__get_config_value('username')
 
-    def get_pep_file(self):
-        return self.__get_config_value('pemfile')
-
-    def get_password_file(self):
-        return self.__get_config_value('password_file')
-
     def get_connection_type(self):
         type = self.__get_config_value('adfs_connection')
 

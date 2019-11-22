@@ -4,10 +4,12 @@ from .AwsConfiguration import AwsConfiguration
 from .ADFSService import ADFSService
 from .AwsStsService import AwsStsService
 from getpass import getpass
+from .Error import IncorrectAssertionError
 import keyring
 
+
 class Authentication:
-    def __init__(self, profile = None):
+    def __init__(self, profile=None):
         # type: (str) -> None
         self.configuration = AwsConfiguration(profile)
         self.service = ADFSService(self.configuration.get_identity_url())
@@ -16,10 +18,24 @@ class Authentication:
 
     def authenticate(self):
         username = self.get_username()
-        password = self.get_password()
-        connection = self.get_connection()
 
-        self.service.connect(connection, username, password)
+        connected = False
+        force_ask = False
+        for x in range(0, 3):
+            if not connected:
+                try:
+                    password = self.get_password(force_ask=force_ask)
+                    connection = self.get_connection()
+                    self.service.connect(connection, username, password)
+                    connected = True
+                except IncorrectAssertionError as err:
+                    print("Error: %s" % err.message)
+                    force_ask = True
+                    connected = False
+
+        if not connected:
+            print("Exiting")
+            exit(1)
 
         role_principal_arn = self.get_role_principal_arn()
         role_arn = role_principal_arn[0]
@@ -47,14 +63,17 @@ class Authentication:
         username = self.configuration.get_username()
 
         if username:
-            print("Username: '%s'" % username)
+            print("Saved username: '%s'" % username)
             return username
 
         print("Username: ", end=" ")
         return input()
 
-    def get_password(self):
-        password = keyring.get_password("awssaml", "saml-password")
+    def get_password(self, force_ask=False):
+        password = None
+
+        if not force_ask:
+            password = keyring.get_password("awssaml", "saml-password")
 
         if not password:
             password = getpass(prompt='Password: ')

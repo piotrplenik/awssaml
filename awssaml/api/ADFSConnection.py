@@ -2,8 +2,10 @@ from abc import ABCMeta
 import requests
 from requests_ntlm import HttpNtlmAuth
 from bs4 import BeautifulSoup
+from .Error import IncorrectAssertionError
 import re
 import sys
+import logging
 
 if ((3, 0) <= sys.version_info <= (3, 9)):
     from urllib.parse import urlparse
@@ -32,6 +34,7 @@ class ADFSConnection:
         self.__identity_url = identity_url
         self.__username = username
         self.__password = password
+        self.logger = logging.getLogger(name='awssaml.ADFSConnection')
 
     def connect(self):
         pass
@@ -65,12 +68,21 @@ class ADFSConnection:
                 self.__assertion = inputtag.get('value')
 
         if not self.__assertion:
-            print("Incorrect response.")
-            print("URL: '%s'" % self.get_identity_url())
-            print("Username, password: '%s', %d digts" % (self.get_username(), len(self.get_password())))
-            print("Status '%d'" % response.status_code)
-            print("Response: %s" % response.text)
-            exit(1)
+            response_error = re.findall(r"\W+<span id=\"errorText\"[\w\ \"=]*>([\w\ \.]+)", response.text)
+
+            self.logger.info("URL: '%s'" % self.get_identity_url())
+            self.logger.info("Username, password: '%s', %d digts" % (self.get_username(), len(self.get_password())))
+            self.logger.info("Status '%d'" % response.status_code)
+
+            if len(response_error) > 0:
+                message = response_error[0]
+            else:
+                message = response.text
+
+            self.logger.error("Incorrect response. Cannot get Assertion.")
+            self.logger.debug("Message: %s" % message)
+
+            raise IncorrectAssertionError(message)
 
 
 class NtlmADFSConnection(ADFSConnection):
