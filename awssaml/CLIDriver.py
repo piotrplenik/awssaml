@@ -17,13 +17,20 @@ Options:
   --version
 """
 
-import sys
+import logging
+from sys import platform, exit
 
 from . import __version__ as VERSION
 from awssaml.commands import *
 
 from docopt import docopt
 
+module_logger = logging.getLogger('awssaml')
+
+if platform == "linux" or platform == "linux2":
+    from systemd.journal import JournalHandler
+
+    module_logger.addHandler(JournalHandler())
 
 def main():
     driver = CLIDriver()
@@ -31,6 +38,9 @@ def main():
 
 
 class CLIDriver(object):
+    def __init__(self):
+        self.logger = logging.getLogger(name='awssaml.CLIDriver')
+
     def main(self):
         """Main CLI entrypoint."""
         args = docopt(__doc__,
@@ -46,8 +56,15 @@ class CLIDriver(object):
         }
 
         if not command_name in commands:
+            self.logger.error("Cannot find command: '%s'.", command_name)
             print("Command '%s' does not exist. Please use `samlapi --help` for more information." % command_name)
-            sys.exit(1)
+            exit(1)
 
         command = commands[command_name](command_args)
-        command.run()
+
+        try:
+            command.run()
+        except KeyboardInterrupt:
+            self.logger.error("Interrupted by user")
+            print("Interrupted by user")
+            exit(1)
