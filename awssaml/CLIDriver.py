@@ -46,7 +46,7 @@ class CLIDriver(object):
         }
 
         if not command_name in commands:
-            print("Command '%s' does not exist. Please use `samlapi --help` for more information." % command_name)
+            print("Command '%s' does not exist. Please use `awssaml --help` for more information." % command_name)
             sys.exit(1)
 
         command = commands[command_name](command_args)
